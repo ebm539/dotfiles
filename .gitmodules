@@ -1,0 +1,15 @@
+[submodule "vim/.vim/bundle/Vundle.vim"]
+	path = vim/.vim/bundle/Vundle.vim
+	url = https://github.com/VundleVim/Vundle.vim.git
+[submodule "i3blocks/.config/i3blocks/i3blocks-contrib"]
+	path = i3blocks/.config/i3blocks/i3blocks-contrib
+	url = https://github.com/vivien/i3blocks-contrib.git
+[submodule "zsh/.zsh/plugins/zsh-autosuggestions"]
+	path = zsh/.zsh/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "zsh/.zsh/plugins/zsh-syntax-highlighting"]
+	path = zsh/.zsh/plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "zsh/.zsh/grml-etc-core"]
+	path = zsh/.zsh/grml-etc-core
+	url = https://github.com/grml/grml-etc-core.git

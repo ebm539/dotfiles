@@ -1,0 +1,12 @@
+[user]
+	email = ebm539@protonmail.com
+	name = Ethan
+	signingkey = 44A4CF313E031605
+[credential]
+	helper = cache
+[core]
+	excludesfile = /home/ethan/.gitignore
+[commit]
+	gpgsign = true
+[pull]
+	rebase = false

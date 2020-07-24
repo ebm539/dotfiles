@@ -1,0 +1,7 @@
+# repo gitignore
+.bash_history
+.bash_logout
+.zsh_history
+.uuid
+redshift/.config/redshift.conf
+redshift/.config/redshift/redshift.conf
