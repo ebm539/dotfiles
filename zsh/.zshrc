@@ -69,7 +69,6 @@ alias grep='grep -i'
 alias zsh-launch-speed="repeat 5 time zsh -i -c exit"
 alias gen-ssh-key="ssh-keygen -C "$(whoami)@$(hostname)-$(date -I)" -t ed25519"
 alias pacman-mirror="awk '/^Server/ {split(\$3,a,\"$\"); print a[1];exit}' /etc/pacman.d/mirrorlist"
-alias factorio='eval ~/.factorio/bin/x64/factorio'
 alias mpc="mpc --host ~/.config/mpd/socket"
 
 redshiftfunc () { if [ "$(pgrep redshift | wc -l)" -eq "0" ]; then redshift -m drm -t 6500:1900 &>/dev/null &; fi }
