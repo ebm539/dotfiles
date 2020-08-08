@@ -21,7 +21,7 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 # gammastep config is not committed to dotfiles git repo
-exec gammastep -t 6500:1900 -c ~/.config/gammastep/config.ini
+exec gammastep -m wayland -t 6500:1900 -c ~/.config/gammastep/config.ini
 # chromium extension
 #exec play-with-mpv
 # firefox extension, causes broken text input on return to tty, occurs with both sway and i3wm
