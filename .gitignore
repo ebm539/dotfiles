@@ -2,6 +2,8 @@
 .bash_history
 .bash_logout
 .zsh_history
+.zshrc.local
 .uuid
 redshift/.config/redshift.conf
 redshift/.config/redshift/redshift.conf
+gammastep/.config/gammastep/config.ini
