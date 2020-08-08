@@ -1,29 +1,35 @@
+# enable terminal cursor, may be disabled as part of silent boot
 setterm -cursor on
 
-zmodload zsh/zprof
+# zsh profiling, run `zprof`
+#zmodload zsh/zprof
 
+# disable terminal "bell"
 setterm -blength 0 2>/dev/null
 
-source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source local zshrc if file exists
+# $HOME in file checking, because ~ does not expand in quotes
+if [ -f "$HOME/.zshrc.local" ]; then
+		. ~/.zshrc.local
+fi
 
-source <(navi widget zsh)
+# source zsh plugins, if they exist (may not exist if git submodules are not fetched)
+# TODO: use an array to iterate over for scripts to source
+if [ -f "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+		. ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+if [ -f "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+		. ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+#source <(navi widget zsh)
 
 export EDITOR="vim"
 export VISUAL="vim"
-export TERMINAL="alacritty"
-export MOZ_WEBRENDER=1
+#export MOZ_WEBRENDER=1
 
-# wrapper function to run sway, then kill ff2mpv on sway exit
-# (ff2mpv breaks tty input after sway exit)
-sway() {
-		export MOZ_ENABLE_WAYLAND=1
-		#also breaks nottetris2 (with an error)
-		export _JAVA_AWT_WM_NONREPARENTING=1
-		# set rgb range to full, this is a hdmi monitor
-		proptest -M i915 -D /dev/dri/card0 124 connector 98 1
-		/usr/bin/sway
-		retVal=$? 
+# ff2mpv breaks tty input
+killff2mpv() {
 		for pid in $(pgrep python3); do
 				if [ $(strings /proc/$pid/cmdline | grep -c ff2mpv) -ge 1 ]; then
 						kill $pid
@@ -31,14 +37,23 @@ sway() {
 		done
 }
 
+
+# wrapper function to run sway, then kill ff2mpv on sway exit
+# (ff2mpv breaks tty input after sway exit)
+sway() {
+		# export MOZ_ENABLE_WAYLAND=1  # breaks vaapi video decode - https://bugzilla.mozilla.org/show_bug.cgi?id=1645671
+		export _JAVA_AWT_WM_NONREPARENTING=1
+		# set RGB range to full for HDMI displays, not using a TV
+		proptest -M i915 -D /dev/dri/card0 124 connector 98 1
+		/usr/bin/sway
+		retVal=$? 
+		killff2mpv
+}
+
 i3() {
 		/usr/bin/startx /usr/bin/i3
 		i3retVal=$? 
-		for pid in $(pgrep python3); do
-				if [ $(strings /proc/$pid/cmdline | grep -c ff2mpv) -ge 1 ]; then
-						kill $pid
-				fi
-		done
+		killff2mpv
 }
 
 # If running from tty1 start sway
@@ -71,13 +86,14 @@ alias gen-ssh-key="ssh-keygen -C "$(whoami)@$(hostname)-$(date -I)" -t ed25519"
 alias pacman-mirror="awk '/^Server/ {split(\$3,a,\"$\"); print a[1];exit}' /etc/pacman.d/mirrorlist"
 alias mpc="mpc --host ~/.config/mpd/socket"
 
-redshiftfunc () { if [ "$(pgrep redshift | wc -l)" -eq "0" ]; then redshift -m drm -t 6500:1900 &>/dev/null &; fi }
+gammastepfunc () { if [ "$(pgrep gammastep | wc -l)" -eq "0" ]; then gammastep -m drm -t 6500:1900 -c ~/.config/gammastep/config.ini &>/dev/null &; fi }
 
-#redshiftfunc
+#gammastepfunc
 
 export HISTSIZE=50000
 export SAVEHIST=100000
 
+# ???
 export XDG_CONFIG_HOME="$HOME/.config"
 
 prompt default
