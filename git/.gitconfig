@@ -1,5 +1,5 @@
 [user]
-	email = ebm539@protonmail.com
+	email = ethan@etha.nz
 	name = Ethan
 	signingkey = 44A4CF313E031605
 [credential]
@@ -7,6 +7,6 @@
 [core]
 	excludesfile = /home/ethan/.gitignore
 [commit]
-	gpgsign = true
+	gpgsign = false
 [pull]
 	rebase = false

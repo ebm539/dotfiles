@@ -19,7 +19,7 @@ Plugin 'dense-analysis/ale'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'ycm-core/YouCompleteMe'
 " Plugin 'z0mbix/vim-shfmt'
-" Plugin 'rust-lang/rust.vim'
+Plugin 'rust-lang/rust.vim'
 Plugin 'python-mode/python-mode'
 " Plugin 'lervag/vimtex'
 " Plugin 'xuhdev/vim-latex-live-preview'
@@ -53,11 +53,15 @@ nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
 " let mapleader = ","
 " nnoremap <leader>p :PymodeLint<cr>    "pressing ,p will run pylint on current buffer
 
+" set list
 
 syntax on
 set tabstop=4
 set softtabstop=4
+set shiftwidth=4
+set smarttab
 set number
+set autoindent
 filetype indent on
 set wildmode=longest,list,full
 set wildmenu
@@ -83,6 +87,9 @@ else
     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
+
+set tags=/home/ethan/programming/esp32/tags
+cs add /home/ethan/programming/esp32/cscope.out
 
 
 " Check Python files with flake8 and pylint.

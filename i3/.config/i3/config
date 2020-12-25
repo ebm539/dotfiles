@@ -23,10 +23,12 @@ exec gammastep -m randr -t 6500:1900 -c ~/.config/gammastep/config.ini
 exec_always feh --bg-scale ~/.wallpaper
 # set dpi
 exec --no-startup-id xrdb -merge ~/.Xresources
-#exec --no-startup-id play-with-mpv
+exec --no-startup-id play-with-mpv
 exec --no-startup-id python3 /usr/share/ff2mpv/ff2mpv.py
 # gnome programs are slow to start otherwise...
 exec_always --no-startup-id dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY
+
+smart_borders no_gaps
 
 # launch a terminal
 bindsym $mod+Return exec i3-sensible-terminal
@@ -154,6 +156,14 @@ bindsym $mod+F5 exec --no-startup-id scrot
 bindsym Print exec --no-startup-id scrot
 bindsym control+F5 exec --no-startup-id scrot
 bindsym $mod+Shift+S exec --no-startup-id scrot -u
+
+# hide title bars (titlebars)
+#for_window [class="^.*"] border pixel 1
+#new_window 1pixel
+
+default_border pixel 1
+
+
 
 # resize window
 mode "resize" {

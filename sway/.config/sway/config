@@ -23,7 +23,7 @@ exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 # gammastep config is not committed to dotfiles git repo
 exec gammastep -m wayland -t 6500:1900 -c ~/.config/gammastep/config.ini
 # chromium extension
-#exec play-with-mpv
+exec play-with-mpv
 # firefox extension, causes broken text input on return to tty, occurs with both sway and i3wm
 exec python3 /usr/share/ff2mpv/ff2mpv.py
 
@@ -253,6 +253,7 @@ bar {
     # The default just shows the current date and time.
     #status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
     status_command SCRIPT_DIR=~/.config/i3blocks/i3blocks-contrib i3blocks
+    #status_command i3status
 
     colors {
         statusline #ffffff
@@ -268,17 +269,23 @@ smart_borders on
 
 # PulseAudio controls
 bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ && pkill -RTMIN+1 i3blocks 
-bindsym Scroll_Lock+F3 exec amixer -q -D pulse sset Master 5%+ && pkill -RTMIN+1 i3blocks 
 bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- && pkill -RTMIN+1 i3blocks
-bindsym Scroll_Lock+F2 exec amixer -q -D pulse sset Master 5%- && pkill -RTMIN+1 i3blocks
 bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && pkill -RTMIN+1 i3blocks
-bindsym Scroll_Lock+F1 exec amixer -q -D pulse sset Master toggle && pkill -RTMIN+1 i3blocks
 
-set $mode_audio HDMI (v) 3.5mm (m)
+bindsym XF86AudioMicMute exec amixer -q -D pulse sset Capture toggle
+
+set $mode_audio HDMI (v) 3.5mm (m) USB (u)
 bindsym $mod+Shift+s mode "$mode_audio"
 mode "$mode_audio" {
 	bindsym v exec pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-stereo-extra1 && pkill -RTMIN+1 i3blocks 
 	bindsym m exec pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:analog-stereo && pkill -RTMIN+1 i3blocks 
+	bindsym u exec pactl set-card-profile alsa_output.usb-Logitech_Logitech_G430_Gaming_Headset-00.analog-stereo output:analog-stereo+input:multichannel-input && pkill -RTMIN+1 i3blocks 
+
+	# this is a copy/paste from above, to allow for changing volume whilst in audio sink selection
+	# PulseAudio controls
+	bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ && pkill -RTMIN+1 i3blocks 
+	bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- && pkill -RTMIN+1 i3blocks
+	bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && pkill -RTMIN+1 i3blocks
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
