@@ -1,0 +1,630 @@
+# List of all options
+
+# If the word "required" is mentioned, the corresponding option is required.
+# Otherwise it is optional.
+
+
+# # # # #
+# Root  #
+# # # # #
+
+# format: String, required
+#
+# The format of the output.
+#
+# A module can be enabled by markup of this form: "%x",
+# where x is the corresponding letter for that module.
+# These markups will be replaced by the output of the corresponding module.
+# Here are the letters:
+#
+# a => battery
+# b => brightness
+# c => cpu
+# d => datetime
+# e => wired
+# f => cpu frequency
+# m => memory
+# i => mic
+# s => sound
+# t => temperature
+# w => wireless
+#
+# The character "%" can be escaped by prepending a backslash: \%
+#
+format: '%c  %t  %b  %s   %w%e %a   %d'
+
+# tick: u32, default: 50
+#
+# The main refresh rate in millisecond.
+#
+tick: 100
+
+# pulse_tick: u32, default: 50
+#
+# The refresh rate in millisecond of the PulseAudio thread.
+#
+pulse_tick: 100
+
+
+# Each module take a "format" option.
+# This option is a string and the following markups will be replaced respectively by the value and the label of the module:
+# %v
+# %l
+
+
+# # # # # # # # # #
+# Battery module  #
+# # # # # # # # # #
+
+battery:
+# Takes the following options:
+
+  # tick: u32, default: 500
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 1000
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # name: String, default: BAT0
+  #
+  # The directory name under /sys/class/power_supply/
+  #
+  name: BAT1
+
+  # low_level: u32, default: 10
+  #
+  # The level below which the battery level is considered low.
+  #
+  low_level: 20
+
+  # full_design: bool, default: false
+  #
+  # Whether or not the current level is calculated based on the full design value.
+  #
+  full_design: true
+
+  # full_label: String, default: *ba
+  #
+  # The label printed when the battery is full.
+  #
+  full_label: '*ba'
+
+  # charging_label: String, default: ^ba
+  #
+  # The label printed when the battery is charging.
+  #
+  charging_label: '^ba'
+
+  # discharging_label: String, default: bat
+  #
+  # The label printed when the battery is discharging.
+  #
+  discharging_label: bat
+
+  # low_label: String, default: !ba
+  #
+  # The label printed when the battery is discharging and the level is low.
+  #
+  low_label: '!ba'
+
+  # unknown_label: String, default: .ba
+  #
+  # The label printed when the battery state is unknown.
+  #
+  unknown_label: '.ba'
+
+  # format: String, default: %l:%v
+  #
+  # The module format.
+  #
+  format: '%l:%v'
+
+
+# # # # # # # # # # #
+# Brightness module #
+# # # # # # # # # # #
+
+brightness:
+# Takes the following option:
+
+  # tick: u32, default: 50
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 100
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # sys_path: String, default: /sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-1/intel_backlight
+  #
+  # /sys/devices path
+  #
+  sys_path: /sys/devices/something/intel_backlight
+
+  # label: String, default: bri
+  #
+  # The label printed.
+  #
+  label: bri
+
+  # format: String, default: %l:%v
+  #
+  # The module format.
+  #
+  format: '%l:%v'
+
+
+# # # # # # # #
+# Cpu module  #
+# # # # # # # #
+
+cpu:
+# Takes the following options:
+
+  # tick: u32, default: 500
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 1000
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # high_level: u32, default: 90
+  #
+  # The percentage above which the cpu usage is considered high.
+  #
+  high_level: 95
+
+  # label: String, default: cpu
+  #
+  # The label printed when the cpu usage is below high level.
+  #
+  label: cpu
+
+  # high_label: String, default: !cp
+  #
+  # The label printed when the cpu usage is above high level.
+  #
+  high_label: '!cp'
+
+  # format: String, default: %l:%v
+  #
+  # The module format.
+  #
+  format: '%l:%v'
+
+
+# # # # # # # # # # # # #
+# Cpu frequency module  #
+# # # # # # # # # # # # #
+
+cpu_freq:
+# Takes the following options:
+
+  # tick: u32, default: 100
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 500
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # cpufreq_path: String, default: /sys/devices/system/cpu/cpu0/cpufreq
+  #
+  # Path to cpufreq directory, in which cpuinfo_max_freq file must be present.
+  # The maximum cpu frequency will be read from this file.
+  #
+  cpufreq_path: /sys/devices/system/cpu/cpu1/cpufreq
+
+  # show_max_freq: bool, default: false
+  #
+  # Whether or not the maximum cpu frequency is printed.
+  #
+  max_freq: true
+
+  # unit: Unit, default: Smart
+  #
+  # enum Display { MHz, GHz, Smart }
+  #
+  # The unit of the frequency.
+  # Smart means if the frequency is less than 1000MHz it will be printed in MHz.
+  # Otherwise it will be printed in GHz.
+  #
+  unit: MHz
+
+  # high_level: u32, default: 80
+  #
+  # The percentage above which the cpu frequency is considered high.
+  #
+  high_level: 90
+
+  # label: String, default: fre
+  #
+  # The label printed when the cpu frequency is below high level.
+  #
+  label: fre
+
+  # high_label: String, default: !fr
+  #
+  # The label printed when the cpu frequency is above high level.
+  #
+  high_label: '!fr'
+
+  # format: String, default: %l:%v
+  #
+  # The module format.
+  #
+  format: '%l:%v'
+
+
+# # # # # # # # # #
+# DateTime module #
+# # # # # # # # # #
+
+date_time:
+# Takes the following option:
+
+  # tick: u32, default: 500
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 1000
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # date_format: String, default: %a. %-e %B %Y, %-kh%M
+  #
+  # The format. For the syntax see https://docs.rs/chrono/*/chrono/format/strftime/index.html
+  #
+  date_format: '%-kh%M'
+
+  # label: String, default: None
+  #
+  # The label printed.
+  #
+  label: dat
+
+  # format: String, default: %v
+  #
+  # The module format.
+  #
+  format: '%v'
+
+
+# # # # # # # # #
+# Memory module #
+# # # # # # # # #
+
+memory:
+# Takes the following options:
+
+  # tick: u32, default: 500
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 1000
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # display: Display, default: GiB
+  #
+  # enum Display { GB, GiB, Percentage }
+  #
+  # Display as used/total in mega/gigabyte, as used/total in mebi/gibibyte or as a percentage.
+  #
+  display: GB
+
+  # high_level: u32, default: 90
+  #
+  # The percentage above which the memory usage is considered high.
+  #
+  high_level: 95
+
+  # label: String, default: mem
+  #
+  # The label printed when the memory usage is below high level.
+  #
+  label: mem
+
+  # high_label: String, default: !me
+  #
+  # The label printed when the memory usage is above high level.
+  #
+  high_label: '!me'
+
+  # format: String, default: %l:%v
+  #
+  # The module format.
+  #
+  format: '%l:%v'
+
+
+# # # # # # # #
+# Mic module  #
+# # # # # # # #
+
+mic:
+# Takes the following options:
+
+  # tick: u32, default: 50
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 100
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # index: u32, default: 0
+  #
+  # The source index.
+  #
+  index: 1
+
+  # label: String, default: mic
+  #
+  # The label printed when the mic is unmute.
+  #
+  label: mic
+
+  # mute_label: String, default: .mi
+  #
+  # The label printed when the mic is mute.
+  #
+  mute_label: '.mi'
+
+  # format: String, default: %l:%v
+  #
+  # The module format.
+  #
+  format: '%l_%v'
+
+
+# # # # # # # # #
+# Sound module  #
+# # # # # # # # #
+
+sound:
+# Takes the following options:
+
+  # tick: u32, default: 50
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 100
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # index: u32, default: 0
+  #
+  # The sink index.
+  #
+  index: 1
+
+  # label: String, default: sou
+  #
+  # The label printed when the sound is unmute.
+  #
+  label: sou
+
+  # mute_label: String, default: .so
+  #
+  # The label printed when the sound is mute.
+  #
+  mute_label: '.so'
+
+  # format: String, default: %l:%v
+  #
+  # The module format.
+  #
+  format: '%l:%v'
+
+
+# # # # # # # # # # # #
+# Temperature module  #
+# # # # # # # # # # # #
+
+temperature:
+# Takes the following options:
+
+  # tick: u32, default: 50
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 100
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # coretemp: String, default: /sys/devices/platform/coretemp.0/hwmon
+  #
+  # The path without the last directory level (because it varies on each kernel boot).
+  # Under this variant directory must be located the tempx_input files.
+  # For example on my machine it can be /sys/devices/platform/coretemp.0/hwmon/hwmon7 or hwmon6 etc.
+  # This last directory is resolved dynamically.
+  #
+  coretemp: /sys/devices/platform/coretemp.1/hwmon
+
+  # core_inputs: String, default: 1
+  #
+  # The average temperature is calculated with one or several tempx_input files.
+  # tempx_input files can contain the temperature of a cpu core.
+  # Based on his cpu (and number of cores), the user must find the correct file(s).
+  #
+  # Can be a number to select one file. eg. 1 for temp1_input.
+  # Can be a inclusive range to select several files, for example:
+  # 1..4
+  # temp1_input
+  # temp2_input
+  # temp3_input
+  # temp4_input
+  #
+  core_inputs: 2..5
+
+  # high_level: u32, default: 75
+  #
+  # The percentage above which the temperature is considered high.
+  #
+  high_level: 80
+
+  # label: String, default: tem
+  #
+  # The label printed when the temperature is below high level.
+  #
+  label: tem
+
+  # high_label: String, default: !te
+  #
+  # The label printed when the temperature is above high level.
+  #
+  high_label: '!te'
+
+  # format: String, default: %l:%v
+  #
+  # The module format.
+  #
+  format: '%l:%v'
+
+
+# # # # # # # # #
+# Wired module  #
+# # # # # # # # #
+
+wired:
+# Takes the following options:
+
+  # tick: u32, default: 1000
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 500
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # discrete: bool, default: false
+  #
+  # If true and there is no active wired connection, print nothing.
+  #
+  discrete: true
+
+  # interface: String, default: enp0s31f6
+  #
+  # The name of the wired interface.
+  #
+  interface: enp0s31f6
+
+  # label: String, default: eth
+  #
+  # The label printed when a wired connection is active.
+  #
+  label: eth
+
+  # disconnected_label: String, default: .et
+  #
+  # The label printed when there is no active wired connection.
+  #
+  disconnected_label: '.et'
+
+  # format: String, default: %l
+  #
+  # The module format (this module has no value to print).
+  #
+  format: '%l'
+
+
+# # # # # # # # # #
+# Wireless module #
+# # # # # # # # # #
+
+wireless:
+# Takes the following options:
+
+  # tick: u32, default: 500
+  #
+  # The refresh rate in millisecond of the module thread.
+  #
+  tick: 250
+
+  # placeholder: String, default: -
+  #
+  # Value to display when there is no data available yet.
+  #
+  placeholder: '-'
+
+  # display: Display, default: Signal
+  #
+  # enum Display { Essid, Signal, LabelOnly }
+  #
+  # Print the essid name, the signal strength in percentage or just the label.
+  #
+  display: Essid
+
+  # max_essid_len: usize, default: 10
+  #
+  # Limit the length of the essid name.
+  #
+  max_essid_len: 5
+
+  # interface: String, default: wlan0
+  #
+  # The name of the wireless interface.
+  #
+  interface: wlp0s20f3
+
+  # label: String, default: wle
+  #
+  # The label printed when a wireless connection is active.
+  #
+  label: wle
+
+  # disconnected_label: String, default: .wl
+  #
+  # The label printed when there is no active wireless connection.
+  #
+  disconnected_label: '.wl'
+
+  # format: String, default: %l:%v
+  #
+  # The module format.
+  #
+  format: '%l:%v'
