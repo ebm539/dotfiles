@@ -47,6 +47,7 @@ killff2mpv() {
 sway() {
 		export MOZ_ENABLE_WAYLAND=1
 		export _JAVA_AWT_WM_NONREPARENTING=1
+		export XDG_CURRENT_DESKTOP=sway  # https://wiki.archlinux.org/index.php/PipeWire#WebRTC_screen_sharing
 		/usr/bin/sway
 		retVal=$? 
 		killff2mpv
@@ -64,9 +65,12 @@ i3() {
 if [[ "$(tty)" = "/dev/tty1" ]] && [ autostart_wm ]; then
 		# run sway, if exit code 0 then exit shell (and restart sway)
 		# `killall sway` returns exit code 0
+		PROPTEST_OUTPUT=$(proptest -M i915 -D /dev/dri/card0)
 		
 		# set RGB range to full for HDMI monitors - not using a TV
-		proptest -M i915 -D /dev/dri/card0 124 connector 98 1
+		# big echo command chain is to get HDMI connector ID
+		# TODO: dynamically get Broadcast RGB value ("98")
+		proptest -M i915 -D /dev/dri/card0 $(echo $PROPTEST_OUTPUT | grep HDMI-A-2 | awk '{split($0,a," "); print a[2]}') connector 98 1
 		intended_wm
 		# i3 does not match if statement on $mod+Shift+e
 		if [ $retVal -eq 0 ]; then
