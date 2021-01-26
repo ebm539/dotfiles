@@ -33,12 +33,14 @@ markup=none
 # The first parameter sets the step (and units to display)
 # The second parameter overrides the mixer selection
 # See the script for details.
+# TODO: move to volume-pulseaudio, and fix script to use pactl instead of pacmd (no pacmd with pipewire yet)
 [volume]
 label=♪ 
 instance=Master
 #instance=PCM
 interval=once
 signal=1
+MIXER=pulse
 
 # Disk usage
 #
