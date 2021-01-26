@@ -1,6 +1,6 @@
 [user]
 	email = ethan@etha.nz
-	name = Ethan
+	name = Ethan Brittain-Morby
 	signingkey = 44A4CF313E031605
 [credential]
 	helper = cache
@@ -10,3 +10,5 @@
 	gpgsign = false
 [pull]
 	rebase = false
+[init]
+	defaultBranch = main
