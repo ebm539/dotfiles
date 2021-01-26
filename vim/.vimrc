@@ -23,6 +23,8 @@ Plugin 'rust-lang/rust.vim'
 Plugin 'python-mode/python-mode'
 " Plugin 'lervag/vimtex'
 " Plugin 'xuhdev/vim-latex-live-preview'
+Plugin 'othree/html5.vim'
+Plugin 'mattn/emmet-vim'
 
 " let g:Tex_DefaultTargetFormat = 'pdf'
 
