@@ -17,13 +17,14 @@ set $term alacritty
 # Your preferred application launcher
 # # Note: pass the final command to swaymsg so that the resulting window can be opened
 # # on the original workspace that the command was run on.
-set $menu dmenu_path | dmenu | xargs swaymsg exec --
+set $menu dmenu_path | bemenu | xargs swaymsg exec --
 
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec /usr/lib/geoclue-2.0/demos/agent
 # gammastep config is not committed to dotfiles git repo
 exec gammastep -m wayland -t 6500:1900 -c ~/.config/gammastep/config.ini
 # chromium extension
-exec play-with-mpv
+#exec play-with-mpv
 # firefox extension, causes broken text input on return to tty, occurs with both sway and i3wm
 exec python3 /usr/share/ff2mpv/ff2mpv.py
 
@@ -46,8 +47,12 @@ output * bg /home/ethan/.wallpaper fill
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
-# external displays default to 0,0
+# my monitor is on my left, my laptop (main screen) is on my right
+# when only using laptop screen (HDMI not connected), right click does not work (only tested wayland programs) when pos is not 0,0
+# when HDMI has negative pos, clicking in xorg programs (through xwayland) breaks
+# ...perhaps I should investigate dynamic output positioning
 output eDP-1 resolution 1920x1080 position 0,0
+output HDMI-A-2 resolution 1920x1080 position -1920,0
 
 set $laptop eDP-1
 bindswitch --reload --locked lid:on output $laptop disable
@@ -281,18 +286,18 @@ mode "$mode_audio" {
 	bindsym m exec pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:analog-stereo && pkill -RTMIN+1 i3blocks
 	bindsym u exec pactl set-card-profile alsa_output.usb-Logitech_Logitech_G430_Gaming_Headset-00.analog-stereo output:analog-stereo+input:multichannel-input && pkill -RTMIN+1 i3blocks
 	## pipewire-pulse - not in use, as pipewire is not quite there yet as a pulseaudio replacement. examples:
-	## - onboard speakers and 3.5mm jack are treated as one device (unplug 3.5mm headphones without muting, sound will play out of speakers)
-	## - changing from 3.5mm/speakers to HDMI output results in HDMI output being 100%(!!), the "set" volume is only applied on volume change
-	##   - (the correct, "set" volume is _shown_ in pavucontrol)
-	## - switching to USB output did not work as expected (existing applications used existing output, not new USB output)
-	## - pavucontrol and pulsemixer crash when a Bluetooth audio device is connected (I only tested AptX HD)
-	#bindsym v exec pactl set-card-profile alsa_card.pci-0000:00:1f.3 output:hdmi-stereo-extra1 && pkill -RTMIN+1 i3blocks
-	#bindsym m exec pactl set-card-profile alsa_card.pci-0000:00:1f.3 output:analog-stereo && pkill -RTMIN+1 i3blocks
-	#bindsym u exec pactl set-card-profile alsa_card.usb-Logitech_Logitech_G430_Gaming_Headset-00 output:analog-stereo+input:multichannel-input && pkill -RTMIN+1 i3blocks
+	## - changing from 3.5mm to HDMI output sometimes does not work - audio is muted for half a second, then continues playing through 3.5mm
+	## - onboard speakers and 3.5mm jack are treated as one device (unplug 3.5mm headphones, sound continues to "play" through 3.5mm and does not switch to either speakers or other output (eg HDMI))
+	## - when plugging in HDMI output, the built-in output device remains on speakers, even if HDMI was set to be the built-in output
+	## - pavucontrol and pulsemixer crash when a Bluetooth audio device is connected (only tested AptX HD)
 
 	bindsym XF86AudioRaiseVolume exec amixer -q -D pulse sset Master 5%+ && pkill -RTMIN+1 i3blocks
 	bindsym XF86AudioLowerVolume exec amixer -q -D pulse sset Master 5%- && pkill -RTMIN+1 i3blocks
 	bindsym XF86AudioMute exec amixer -q -D pulse sset Master toggle && pkill -RTMIN+1 i3blocks
+
+	# control mpd whilst audio output interface is open
+	bindsym XF86AudioPlay exec --no-startup-id mpc toggle
+	bindsym $mod+p exec --no-startup-id mpc toggle
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -307,6 +312,9 @@ bindsym Scroll_Lock+F5 exec --no-startup-id light -U 5
 # Media player controls
 bindsym XF86AudioPlay exec --no-startup-id mpc toggle
 bindsym $mod+p exec --no-startup-id mpc toggle
+
+# launch terminal with settings Fn key
+bindsym XF86Tools exec $term
 
 set $mode_display Ext Screen (v) EXT TOGGLE, (m) INT TOGGLE
 mode "$mode_display" {
@@ -363,6 +371,7 @@ mode "$mode_gaps_outer" {
         bindsym Shift+Escape mode "default"
 }
 
+# android studio
 for_window [class="jetbrains-(.*)" title="Go to Line/Column"] floating enable
 for_window [class="jetbrains-(.*)" title="Rename"] floating enable
 for_window [class="jetbrains-(.*)" title="Open Project"] floating enable
