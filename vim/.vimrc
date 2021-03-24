@@ -44,7 +44,11 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
+" run python3 code on f9 press
+"nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
+
+" build and run rust project on f9 press
+nnoremap <F9> :Crun <cr>
 
 " :R to run open bash script
 " command R !./%
@@ -92,6 +96,8 @@ endif
 
 set tags=/home/ethan/programming/esp32/tags
 cs add /home/ethan/programming/esp32/cscope.out
+
+let g:rustfmt_autosave = 1
 
 
 " Check Python files with flake8 and pylint.
