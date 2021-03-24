@@ -12,12 +12,6 @@ intended_wm() {sway}
 # disable terminal "bell"
 setterm -blength 0 2>/dev/null
 
-# source local zshrc if file exists
-# $HOME in file checking, because ~ does not expand in quotes
-if [ -f "$HOME/.zshrc.local" ]; then
-		. ~/.zshrc.local
-fi
-
 # source zsh plugins, if they exist (may not exist if git submodules are not fetched)
 # TODO: use an array to iterate over for scripts to source
 if [ -f "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
@@ -103,6 +97,14 @@ gammastepfunc () { if [ "$(pgrep gammastep | wc -l)" -eq "0" ]; then gammastep -
 
 export HISTSIZE=50000
 export SAVEHIST=100000
+
+# source local zshrc if file exists
+# $HOME in file checking, because ~ does not expand in quotes
+if [ -f "$HOME/.zshrc.local" ]; then
+		. ~/.zshrc.local
+fi
+
+
 
 # ???
 export XDG_CONFIG_HOME="$HOME/.config"
